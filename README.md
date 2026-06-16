@@ -1,87 +1,39 @@
-# Welcome to React Router!
+## Treść
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Zadanie polega na stworzeniu aplikacji obsługującej pełen cykl CRUD na podstawie danych przedstawionych w załączniku. Aplikacja powinna umożliwiać:
+- dodawanie nowych obiektów,
+- edycję istniejących,
+- usuwanie obiektów,
+- wyświetlanie listy obiektów,
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+wszystko zgodnie z opisanymi historyjkami użytkownika.
 
-## Features
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
 
-## Getting Started
+Projekt powinien mieć:
+- widoki HTML obsługujące CRUD z użyciem frameworka React;
+- zakodowanie designu w myśl responsive design;
+- użycie CSS (preprocesory CSS jak najbardziej dozwolone) żeby osiągnąć ładny i czytelny wygląd;
+- backend/jakieś dane zamockowane (to nie będzie sprawdzane) ale jeśli czujesz się na siłach to możesz dodać coś od siebie (ale nie jest to konieczność).
 
-### Installation
+ 
 
-Install the dependencies:
+Kod projektu powinien zostać umieszczony w repozytorium na GitHubie - pozwoli to na przejrzystą dokumentację i kontrolę wersji (wersja live aplikacji mile widziana)
 
-```bash
-npm install
-```
+Jeśli coś będzie niejasne, możesz przyjąć rozwiązanie, które według Ciebie ma sens i pasuje do standardowych praktyk projektowych.
 
-### Development
+## Zadanie techniczne
 
-Start the development server with HMR:
+I want to be able to create, edit or delete a separate campaign for each of my products I want to sell
 
-```bash
-npm run dev
-```
+Sellers to enter the following information for each campaign:
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
+- Campaign name (mandatory)
+- Keywords (mandatory, pre-populated with typeahead)
+- Bid amount (mandatory, min amount )
+- Campaign fund (mandatory and deducted from their Emerald account 
+funds, new balance updated on screen
+- Status (on or off - mandatory)
+- Town (can pick from pre-populated 
+dropdown list of towns)
+- Radius (mandatory in kilometres)
