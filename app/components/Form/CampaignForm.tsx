@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { Campaign, emptyCampaign } from '~/types/Capmaign'
+import * as color from '~/colors'
 
 import { FormField } from '@/Form/FormField'
 import { bidAmountMin, citiesOptions } from '~/data-mockup'
@@ -27,15 +28,9 @@ const emptyErrors: errorsType = {
   radius: '',
 }
 
-const errorColor = '#ef4444'
-const filledColor = '#a5b4fc'
-const emptyColor = '#e5e7eb'
-const accentColor = '#6366f1'
-
 export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: CampaignFormProps) {
   const [form, setForm] = useState<Campaign>(campaign)
   const [errors, setErrors] = useState<errorsType>({ ...emptyErrors })
-  const [success, setSuccess] = useState(false)
   const [emeraldFundsBalance, setEmeraldFundsBalance] = useState(emeraldFunds)
 
   const set = (field: string, val: any) => {
@@ -82,7 +77,6 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
     if (!containsErrors) {
       const balance = emeraldFundsBalance - Number(form.fund)
       setEmeraldFundsBalance(balance)
-      setSuccess(true)
 
       onSuccess(form)
     }
@@ -93,18 +87,18 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
       <FormField label="Campaign Name" required error={errors.name}>
         <input
           style={{
-            borderColor: errors.name ? errorColor : form.name ? filledColor : emptyColor,
+            borderColor: errors.name ? color.error : form.name ? color.accentBlunt : color.bright,
           }}
           value={form.name}
           onChange={(e) => set('name', e.target.value)}
           placeholder="e.g. Summer Sale 2025"
-          onFocus={(e) => !errors.name && (e.target.style.borderColor = accentColor)}
+          onFocus={(e) => !errors.name && (e.target.style.borderColor = color.accent)}
           onBlur={(e) =>
             (e.target.style.borderColor = errors.name
-              ? errorColor
+              ? color.error
               : form.name
-                ? filledColor
-                : emptyColor)
+                ? color.accentBlunt
+                : color.bright)
           }
         />
       </FormField>
@@ -123,16 +117,16 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
               type="number"
               className="w-full"
               style={{
-                borderColor: errors.bidAmount ? errorColor : emptyColor,
+                borderColor: errors.bidAmount ? color.error : color.bright,
                 paddingLeft: '28px',
               }}
               value={form.bidAmount}
               onChange={(e) => set('bidAmount', e.target.value)}
               min={bidAmountMin}
               placeholder={String(bidAmountMin)}
-              onFocus={(e) => !errors.bidAmount && (e.target.style.borderColor = accentColor)}
+              onFocus={(e) => !errors.bidAmount && (e.target.style.borderColor = color.accent)}
               onBlur={(e) =>
-                (e.target.style.borderColor = errors.bidAmount ? errorColor : emptyColor)
+                (e.target.style.borderColor = errors.bidAmount ? color.error : color.bright)
               }
             />
             <span className="absolute left-3 top-[50%] -translate-y-[50%] text-[0.9rem] text-gray-400 pointer-events-none">
@@ -153,15 +147,17 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
               className="w-full"
               style={{
                 paddingLeft: '28px',
-                borderColor: errors.fund ? errorColor : emptyColor,
+                borderColor: errors.fund ? color.error : color.bright,
               }}
               value={form.fund}
               onChange={(e) => set('fund', e.target.value)}
               min={1}
               max={emeraldFundsBalance}
               placeholder="0"
-              onFocus={(e) => !errors.fund && (e.target.style.borderColor = accentColor)}
-              onBlur={(e) => (e.target.style.borderColor = errors.fund ? errorColor : emptyColor)}
+              onFocus={(e) => !errors.fund && (e.target.style.borderColor = color.accent)}
+              onBlur={(e) =>
+                (e.target.style.borderColor = errors.fund ? color.error : color.bright)
+              }
             />
             <span className="absolute left-3 top-[50%] -translate-y-[50%] text-[0.9rem] text-gray-400 pointer-events-none">
               $
@@ -180,15 +176,20 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
               className="flex justify-center items-center gap-3 flex-1 p-3 rounded-md text-sm font-semibold transition"
               style={{
                 border: form.status === s ? '2px solid transparent' : '1.5px solid #e5e7eb',
-                background: form.status === s ? (s === true ? accentColor : '#374151') : '#f9fafb',
-                color: form.status === s ? '#fff' : '#6b7280',
+                background:
+                  form.status === s
+                    ? s === true
+                      ? color.accent
+                      : color.disabledAccent
+                    : '#f9fafb',
+                color: form.status === s ? '#fff' : color.disabled,
               }}
             >
               <span
                 className="inline-block size-2 rounded-[50%]"
                 style={{
                   background:
-                    form.status === s ? (s === true ? filledColor : '#9ca3af') : '#d1d5db',
+                    form.status === s ? (s === true ? color.accentBlunt : '#9ca3af') : '#d1d5db',
                 }}
               />
               {s === true ? 'Active' : 'Inactive'}
@@ -209,8 +210,8 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
             }}
             value={form.town}
             onChange={(e) => set('town', e.target.value)}
-            onFocus={(e) => (e.target.style.borderColor = accentColor)}
-            onBlur={(e) => (e.target.style.borderColor = emptyColor)}
+            onFocus={(e) => (e.target.style.borderColor = color.accent)}
+            onBlur={(e) => (e.target.style.borderColor = color.bright)}
           >
             {citiesOptions.map((c) => (
               <option key={c} value={c}>
@@ -227,15 +228,17 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
               className="w-full"
               style={{
                 paddingRight: '40px',
-                borderColor: errors.radius ? errorColor : emptyColor,
+                borderColor: errors.radius ? color.error : color.bright,
               }}
               value={form.radius}
               onChange={(e) => set('radius', e.target.value)}
               min={1}
               max={9999}
               placeholder="25"
-              onFocus={(e) => !errors.radius && (e.target.style.borderColor = accentColor)}
-              onBlur={(e) => (e.target.style.borderColor = errors.radius ? errorColor : emptyColor)}
+              onFocus={(e) => !errors.radius && (e.target.style.borderColor = color.accent)}
+              onBlur={(e) =>
+                (e.target.style.borderColor = errors.radius ? color.error : color.bright)
+              }
             />
             <span className="absolute right-3 top-[50%] -translate-y-[50%] text-[0.9rem] text-gray-400 pointer-events-none">
               km
@@ -248,7 +251,7 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
       <div className="flex gap-4 mt-[20px]">
         <div className="">
           <p className="w-full font-semibold text-xs text-gray-400">EMERALD BALANCE: </p>
-          <p className="w-full text-2xl font-extrabold" style={{ color: accentColor }}>
+          <p className="w-full text-2xl font-extrabold" style={{ color: color.accent }}>
             {emeraldFundsBalance.toFixed(2)}$
           </p>
         </div>
@@ -256,7 +259,7 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
           type="submit"
           className="max-w-[300px] p-3 ml-auto flex-2 border-none rounded-[10px] font-bold text-white"
           style={{
-            background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+            background: color.accent,
             boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
           }}
         >

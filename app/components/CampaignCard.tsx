@@ -1,6 +1,7 @@
 import { StatusBulb } from '@/StatusBulb'
 import { KeyWordsList } from '@/KeyWordsList'
 import type { campaignCard } from '~/types/CampaignCard'
+import { white } from '~/colors'
 
 interface campaignCardProps extends campaignCard {
   click?: (campaign: campaignCard) => void
@@ -9,7 +10,10 @@ interface campaignCardProps extends campaignCard {
 export function CampaignCard({ name, keywords, isActive, click }: campaignCardProps) {
   return (
     <article
-      className="flex flex-col border border-indigo-500 p-2 rounded-md"
+      className="flex flex-col p-3 rounded-md shadow-md"
+      style={{
+        backgroundColor: white,
+      }}
       onClick={() => click && click({ name, keywords, isActive })}
     >
       <div className="flex justify-between items-center">
