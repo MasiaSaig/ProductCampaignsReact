@@ -1,9 +1,10 @@
 .jumping-button {
   padding: 0.75rem;
   border-radius: 0.5rem;
-  transition: transform 0.3s linear;
+  transition: transform 0.15s linear;
+  font-weight: 600;
 }
 
 .jumping-button:hover {
-  transform: translateY(1px);
+  transform: translateY(-1px);
 }

@@ -5,5 +5,9 @@ interface ButtonCreateCampaignProps {
 }
 
 export function ButtonCreateCampaign({ onClick }: ButtonCreateCampaignProps) {
-  return <Button onClick={onClick}>Create new Campaign</Button>
+  return (
+    <Button onClick={onClick} className="bg-blue-500 text-white">
+      Create new Campaign
+    </Button>
+  )
 }

@@ -49,9 +49,13 @@ export default function CampaignForm({
   const [errors, setErrors] = useState<errorsType>({ ...emptyErrors })
   const [emeraldFundsBalance, setEmeraldFundsBalance] = useState(emeraldFunds)
 
-  const set = (field: string, val: any) => {
+  function set(field: string, val: any) {
     setForm((f) => ({ ...f, [field]: val }))
     if (errors[field as keyof errorsType]) setErrors((e) => ({ ...e, [field]: '' }))
+  }
+
+  function changeKeyWords(_event: any, value: any) {
+    set('keywords', value)
   }
 
   const validate = () => {
@@ -85,7 +89,7 @@ export default function CampaignForm({
     return e
   }
 
-  const handleSubmit = (e: any) => {
+  function handleSubmit(e: any) {
     e.preventDefault()
     const errorMessages = validate()
     setErrors(errorMessages)
@@ -95,23 +99,19 @@ export default function CampaignForm({
     if (!containsErrors) {
       const balance = emeraldFundsBalance - Number(form.fund)
       setEmeraldFundsBalance(balance)
-
-      onSuccess(form)
+      // set id if creating
+      console.log('max', Math.max(...campaigns.map((c) => c.id)) + 1)
+      if (form.id <= 0) {
+        // set('id', Math.max(...campaigns.map((c) => c.id)) + 1)
+        onSuccess({ ...form, id: Math.max(...campaigns.map((c) => c.id)) + 1 })
+      } else {
+        onSuccess(form)
+      }
     }
   }
 
   const deleteCampaign = () => {
     onDelete && onDelete(form)
-  }
-
-  function removeKeyword(keyword: string) {
-    if (form.keywords.find((kw) => kw === keyword)) {
-      form.keywords.filter((kw) => kw !== keyword)
-    }
-  }
-
-  function changeKeyWords(_event: any, value: any) {
-    set('keywords', value)
   }
 
   return (
@@ -324,11 +324,11 @@ export default function CampaignForm({
           type="submit"
           className="max-w-[300px] p-3 ml-auto flex-2 border-none rounded-[10px] font-bold text-white"
           style={{
-            background: color.accent,
+            background: '#2B7FFF',
             boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
           }}
         >
-          Update Campaign
+          {form.id > 0 ? 'Update Campaign' : 'Create Campaign'}
         </button>
       </div>
     </form>
