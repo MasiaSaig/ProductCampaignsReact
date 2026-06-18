@@ -12,18 +12,7 @@ interface CampaignContextType {
 const CampaignContext = createContext<CampaignContextType | null>(null)
 
 export const CampaignProvider = ({ children }: { children: React.ReactNode }) => {
-  const [campaigns, setCampaigns] = useState<Campaign[]>([])
-
-  // Load mockup data
-  useEffect(() => {
-    let ignore = false
-
-    if (!ignore) setCampaigns(campaignsMockup)
-
-    return () => {
-      ignore = true
-    }
-  }, [])
+  const [campaigns, setCampaigns] = useState<Campaign[]>(() => campaignsMockup)
 
   const addCampaign = (campaign: Campaign) => {
     setCampaigns((prev) => [...prev, campaign])
