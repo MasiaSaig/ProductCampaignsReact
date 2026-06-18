@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
 import { Campaign, emptyCampaign } from '~/types/Campaign'
 import { EmeraldFundBalance } from '@/EmeraldFundBalance'
+import TextField from '@mui/material/TextField'
+import Autocomplete from '@mui/material/Autocomplete'
 import * as color from '~/colors'
 
 import { FormField } from '@/Form/FormField'
-import { bidAmountMin, citiesOptions } from '~/data-mockup'
+import { bidAmountMin, citiesOptions, keywordsOptions } from '~/data-mockup'
 import { useCampaigns } from '~/CampaignContext'
 
 import '@/Form/CampaignForm.css'
@@ -60,8 +62,8 @@ export default function CampaignForm({
     if (loadedName !== form.name && campaigns.find((c) => c.name === form.name))
       e.name = 'Campaign name is already in use.'
 
-    // if (form.keywords.length === 0) e.keywords = 'At least one keyword is required.'
-    // if (form.keywords.length > 10) e.keywords = 'Provided too many key words.'
+    if (form.keywords.length === 0) e.keywords = 'At least one keyword is required.'
+    if (form.keywords.length > 10) e.keywords = 'Provided too many key words.'
 
     form.bidAmount = Number(form.bidAmount)
     if (!form.bidAmount) e.bidAmount = 'Bid amount is required.'
@@ -102,6 +104,16 @@ export default function CampaignForm({
     onDelete && onDelete(form)
   }
 
+  function removeKeyword(keyword: string) {
+    if (form.keywords.find((kw) => kw === keyword)) {
+      form.keywords.filter((kw) => kw !== keyword)
+    }
+  }
+
+  function changeKeyWords(_event: any, value: any) {
+    set('keywords', value)
+  }
+
   return (
     <form onSubmit={handleSubmit} noValidate>
       <FormField label="Campaign Name" required error={errors.name}>
@@ -123,6 +135,40 @@ export default function CampaignForm({
       </FormField>
 
       {/* type a head with suggestions KEYWORDS */}
+      <FormField
+        label="Key words"
+        required
+        error={errors.keywords}
+        hint={'At Least 1 and at most 10.'}
+      >
+        <div className="relative">
+          <Autocomplete
+            multiple
+            disablePortal
+            limitTags={10}
+            options={keywordsOptions}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label=""
+                placeholder="Key word..."
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '&.Mui-focused fieldset': {
+                      borderColor: color.accent,
+                    },
+                  },
+                }}
+              />
+            )}
+            value={form.keywords}
+            onChange={changeKeyWords}
+            getOptionLabel={(keyword) => keyword}
+            isOptionEqualToValue={(option, keyword) => option === keyword}
+            className="mb-2"
+          />
+        </div>
+      </FormField>
 
       <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
         <FormField
@@ -194,19 +240,14 @@ export default function CampaignForm({
               style={{
                 border: form.status === s ? '2px solid transparent' : '1.5px solid #e5e7eb',
                 background:
-                  form.status === s
-                    ? s === true
-                      ? color.accent
-                      : color.disabledAccent
-                    : '#f9fafb',
+                  form.status === s ? (s === true ? '#00AF00' : color.disabledAccent) : '#f9fafb',
                 color: form.status === s ? '#fff' : color.disabled,
               }}
             >
               <span
                 className="inline-block size-2 rounded-[50%]"
                 style={{
-                  background:
-                    form.status === s ? (s === true ? color.accentBlunt : '#9ca3af') : '#d1d5db',
+                  background: form.status === s ? (s === true ? '#00D700' : '#9ca3af') : '#d1d5db',
                 }}
               />
               {s === true ? 'Active' : 'Inactive'}
