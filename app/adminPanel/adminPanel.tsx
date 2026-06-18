@@ -62,9 +62,14 @@ export function AdminPanel() {
   }
 
   function tryUpdateCampaign(updatedCampaign: Campaign) {
-    updateCampaign(updatedCampaign.id, updatedCampaign)
-    closeUpdateModal()
-    setEmeraldFundsBalance(emeraldFunds - updatedCampaign.fund)
+    const oldCampaignData = campaigns.find((c) => c.id === updatedCampaign.id)
+    if (oldCampaignData) {
+      updateCampaign(updatedCampaign.id, updatedCampaign)
+      closeUpdateModal()
+      setEmeraldFundsBalance(emeraldFundsBalance - (updatedCampaign.fund - oldCampaignData.fund))
+    } else {
+      console.error('Campaign with this ID does not exists', updatedCampaign)
+    }
   }
 
   function deleteCampaign(campaign: Campaign) {
