@@ -1,5 +1,7 @@
 import { Campaign } from './types/Capmaign'
 
+export const emeraldFunds = 9999
+
 export const citiesOptions = ['Warsaw', 'Cracow', 'Gdansk', 'Wroclaw', 'Poznan', 'Lodz', 'Katowice']
 
 export const bidAmountMin = 100
