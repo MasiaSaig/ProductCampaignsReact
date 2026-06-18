@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { CampaignCard } from '@/CampaignCard'
-import { Campaign, emptyCampaign } from '~/types/Campaign'
-import { CampaignUpdateModal } from '@/CampaignUpdateModal'
 import { EmeraldFundBalance } from '@/EmeraldFundBalance'
+import { CampaignUpdateModal } from '@/CampaignUpdateModal'
+import { TopBar } from '@/TopBar'
+
+import { Campaign, emptyCampaign } from '~/types/Campaign'
 import type { campaignCard } from '~/types/CampaignCard'
 
 import { useCampaigns } from '~/CampaignContext'
@@ -51,32 +53,35 @@ export function AdminPanel() {
   }
 
   return (
-    <section className="p-8">
-      <main className="max-w-5xl m-auto">
-        <EmeraldFundBalance emeraldFund={emeraldFundsBalance} />
+    <section>
+      <TopBar />
+      <section className="p-8">
+        <main className="max-w-5xl m-auto">
+          <EmeraldFundBalance emeraldFund={emeraldFundsBalance} />
 
-        <section className="mt-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2">
-          {campaigns.map((campaign, index) => (
-            <CampaignCard
-              key={index}
-              name={campaign.name}
-              keywords={campaign.keywords}
-              isActive={campaign.status}
-              click={openModal}
-            />
-          ))}
-        </section>
-      </main>
+          <section className="mt-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2">
+            {campaigns.map((campaign, index) => (
+              <CampaignCard
+                key={index}
+                name={campaign.name}
+                keywords={campaign.keywords}
+                isActive={campaign.status}
+                click={openModal}
+              />
+            ))}
+          </section>
+        </main>
 
-      {showCampaignUpdateDialog && (
-        <CampaignUpdateModal
-          exit={closeModal}
-          campaign={editingCampaign}
-          emeraldFunds={emeraldFundsBalance}
-          onSuccess={(c) => updateDataAfterSuccess(c)}
-          onDelete={(c) => deleteCampaign(c)}
-        />
-      )}
+        {showCampaignUpdateDialog && (
+          <CampaignUpdateModal
+            exit={closeModal}
+            campaign={editingCampaign}
+            emeraldFunds={emeraldFundsBalance}
+            onSuccess={(c) => updateDataAfterSuccess(c)}
+            onDelete={(c) => deleteCampaign(c)}
+          />
+        )}
+      </section>
     </section>
   )
 }
