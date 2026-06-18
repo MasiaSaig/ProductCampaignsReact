@@ -5,20 +5,32 @@ import { white } from '~/colors'
 
 interface campaignCardProps extends campaignCard {
   click?: (campaign: campaignCard) => void
+  showStatusBulb?: boolean
+  showTown?: boolean
 }
 
-export function CampaignCard({ name, keywords, isActive, click }: campaignCardProps) {
+export function CampaignCard({
+  id,
+  name,
+  keywords,
+  isActive,
+  town,
+  click,
+  showStatusBulb = true,
+  showTown = false,
+}: campaignCardProps) {
   return (
     <article
-      className="flex flex-col p-3 rounded-md shadow-md"
+      className="flex flex-col p-3 rounded-md shadow-m transition-all border border-transparent hover:border-[#D39C58]"
       style={{
         backgroundColor: white,
       }}
-      onClick={() => click && click({ name, keywords, isActive })}
+      onClick={() => click && click({ id, name, keywords, isActive, town })}
     >
       <div className="flex justify-between items-center">
         <h3 className="font-bold text-2xl">{name}</h3>
-        <StatusBulb isActive={isActive} />
+        {showStatusBulb && <StatusBulb isActive={isActive} />}
+        {showTown && town && <span className="bg-gray-300 rounded-lg px-[4px]">{town}</span>}
       </div>
       <KeyWordsList keywords={keywords} />
     </article>

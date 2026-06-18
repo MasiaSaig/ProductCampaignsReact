@@ -25,7 +25,7 @@ export function Modal({ title = '', exit, children }: ModalProps) {
         open
         className="relative flex flex-col w-full md:w-[calc(100vw-8rem)] sm:w-[calc(100vw-4rem)] max-w-3xl sm:max-h-[90vh] sm:h-auto h-screen sm:rounded-2xl shadow-2xl border-0 p-0 m-0 bg-white"
       >
-        <header className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <header className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shadow-md">
           <h2 className="text-lg font-semibold text-gray-900 leading-tight tracking-tight">
             {title}
           </h2>

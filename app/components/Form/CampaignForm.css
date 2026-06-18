@@ -4,7 +4,8 @@ form input {
   padding: 10px 14px;
 }
 
-form input:focus {
+form input:focus,
+input:hover {
   outline: 1px solid #b3603e;
 }
 
@@ -13,7 +14,8 @@ form select {
   border-radius: 8px;
   padding: 10px 14px;
 }
-form select:focus {
+form select:focus,
+select:hover {
   outline: 1px solid #b3603e;
 }
 

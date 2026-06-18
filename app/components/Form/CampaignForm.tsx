@@ -3,6 +3,7 @@ import { Campaign, emptyCampaign } from '~/types/Campaign'
 import { EmeraldFundBalance } from '@/EmeraldFundBalance'
 import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
+import Button from '@/Buttons/Button'
 import * as color from '~/colors'
 
 import { FormField } from '@/Form/FormField'
@@ -100,9 +101,9 @@ export default function CampaignForm({
       const balance = emeraldFundsBalance - Number(form.fund)
       setEmeraldFundsBalance(balance)
       // set id if creating
-      console.log('max', Math.max(...campaigns.map((c) => c.id)) + 1)
       if (form.id <= 0) {
-        // set('id', Math.max(...campaigns.map((c) => c.id)) + 1)
+        // set immedately, dont wait for state to update
+        //set('id', Math.max(...campaigns.map((c) => c.id)) + 1)
         onSuccess({ ...form, id: Math.max(...campaigns.map((c) => c.id)) + 1 })
       } else {
         onSuccess(form)
@@ -170,7 +171,7 @@ export default function CampaignForm({
         </div>
       </FormField>
 
-      <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
+      <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-4">
         <FormField
           label="Bid Amount"
           required
@@ -230,7 +231,7 @@ export default function CampaignForm({
       </div>
 
       <FormField label="Status" required>
-        <div className="flex gap-[10px]">
+        <div className="flex gap-[10px] flex-col sm:flex-row">
           {[true, false].map((s, index) => (
             <button
               key={index}
@@ -256,7 +257,7 @@ export default function CampaignForm({
         </div>
       </FormField>
 
-      <div className="grid sm:grid-cols-2 grid-cols-1 gap-4">
+      <div className="grid sm:grid-cols-2 grid-cols-1 sm:gap-4">
         <FormField label="Town">
           <select
             className="cursor-pointer appearance-none pr-[38px]"
@@ -271,6 +272,9 @@ export default function CampaignForm({
             onChange={(e) => set('town', e.target.value)}
             onBlur={(e) => (e.target.style.borderColor = color.bright)}
           >
+            <option key={'Any town'} value={'Any town'}>
+              Any town
+            </option>
             {citiesOptions.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -305,12 +309,11 @@ export default function CampaignForm({
       </div>
 
       {/* Actions */}
-      <div className="flex gap-4 mt-[20px]">
+      <div className="flex mt-[20px] justify-between flex-col gap-2 sm:gap-4 sm:flex-row">
         {showEmeraldBalance && <EmeraldFundBalance emeraldFund={emeraldFundsBalance} />}
         {showDeleteButton && (
-          <button
-            type="button"
-            className="max-w-[200px] p-3 flex-1 border-none rounded-[10px] font-bold text-white"
+          <Button
+            className="sm:max-w-[200px] max-w-full sm:flex-1 p-3 flex-1 border-none rounded-[10px] font-bold text-white"
             style={{
               background: '#C70000',
               boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
@@ -318,18 +321,18 @@ export default function CampaignForm({
             onClick={deleteCampaign}
           >
             Delete Campaign
-          </button>
+          </Button>
         )}
-        <button
+        <Button
           type="submit"
-          className="max-w-[300px] p-3 ml-auto flex-2 border-none rounded-[10px] font-bold text-white"
+          className="sm:max-w-[250px] max-w-full sm:flex-1 p-3 flex-2 border-none rounded-[10px] font-bold text-white"
           style={{
             background: '#2B7FFF',
             boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
           }}
         >
           {form.id > 0 ? 'Update Campaign' : 'Create Campaign'}
-        </button>
+        </Button>
       </div>
     </form>
   )

@@ -81,7 +81,7 @@ export function AdminPanel() {
       <TopBar />
       <section className="p-8">
         <main className="max-w-5xl m-auto">
-          <div className="flex justify-between">
+          <div className="flex justify-between gap-2 sm:flex-row flex-col">
             <ButtonCreateCampaign onClick={openCreateModal} />
             <EmeraldFundBalance emeraldFund={emeraldFundsBalance} />
           </div>
@@ -89,10 +89,12 @@ export function AdminPanel() {
           <section className="mt-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2">
             {campaigns.map((campaign, index) => (
               <CampaignCard
-                key={index}
+                key={campaign.id}
+                id={campaign.id}
                 name={campaign.name}
                 keywords={campaign.keywords}
                 isActive={campaign.status}
+                town={campaign.town}
                 click={openUpdateModal}
               />
             ))}
