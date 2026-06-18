@@ -1,4 +1,5 @@
 export class Campaign {
+  id: number
   name: string
   keywords: Array<string>
   bidAmount: number
@@ -7,6 +8,7 @@ export class Campaign {
   radius: number // km
   town: string
   constructor(
+    id: number,
     name: string,
     keywords: Array<string>,
     bidAmount: number,
@@ -15,6 +17,7 @@ export class Campaign {
     radius: number = 5,
     town: string = ''
   ) {
+    this.id = id
     this.name = name
     this.keywords = keywords
     this.bidAmount = bidAmount
@@ -26,6 +29,7 @@ export class Campaign {
 }
 
 export const emptyCampaign = {
+  id: 0,
   name: '',
   keywords: [],
   bidAmount: 0,

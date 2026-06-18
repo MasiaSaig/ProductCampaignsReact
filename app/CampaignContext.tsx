@@ -1,12 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { Campaign } from '~/types/Capmaign'
+import { Campaign } from '~/types/Campaign'
 import { campaignsMockup } from '~/data-mockup'
 
 interface CampaignContextType {
   campaigns: Campaign[]
   addCampaign: (campaign: Campaign) => void
-  removeCampaign: (name: string) => void
-  updateCampaign: (name: string, updated: Campaign) => void
+  removeCampaign: (id: number) => void
+  updateCampaign: (id: number, updated: Campaign) => void
 }
 
 const CampaignContext = createContext<CampaignContextType | null>(null)
@@ -25,18 +25,16 @@ export const CampaignProvider = ({ children }: { children: React.ReactNode }) =>
     }
   }, [])
 
-  const addCampaign = (campaign: Campaign): boolean => {
-    // must have unique name
-    if (campaigns.find((c) => c.name === campaign.name)) return false
+  const addCampaign = (campaign: Campaign) => {
     setCampaigns((prev) => [...prev, campaign])
-    return true
   }
 
-  const removeCampaign = (name: string) =>
-    setCampaigns((prev) => prev.filter((c) => c.name !== name))
+  const removeCampaign = (id: number) => {
+    setCampaigns((prev) => prev.filter((c) => c.id !== id))
+  }
 
-  const updateCampaign = (name: string, updated: Campaign) =>
-    setCampaigns((prev) => prev.map((c) => (c.name === name ? updated : c)))
+  const updateCampaign = (id: number, updated: Campaign) =>
+    setCampaigns((prev) => prev.map((c) => (c.id === id ? updated : c)))
 
   return (
     <CampaignContext.Provider value={{ campaigns, addCampaign, removeCampaign, updateCampaign }}>

@@ -1,16 +1,21 @@
 import { useState, useRef, useEffect } from 'react'
-import { Campaign, emptyCampaign } from '~/types/Capmaign'
+import { Campaign, emptyCampaign } from '~/types/Campaign'
+import { EmeraldFundBalance } from '@/EmeraldFundBalance'
 import * as color from '~/colors'
 
 import { FormField } from '@/Form/FormField'
 import { bidAmountMin, citiesOptions } from '~/data-mockup'
+import { useCampaigns } from '~/CampaignContext'
 
 import '@/Form/CampaignForm.css'
 
 interface CampaignFormProps {
+  showEmeraldBalance?: boolean
+  showDeleteButton?: boolean
   campaign: Campaign
   emeraldFunds: number
   onSuccess: (updatedCampaign: Campaign) => void
+  onDelete?: (campaignToDelete: Campaign) => void
 }
 
 interface errorsType {
@@ -28,7 +33,16 @@ const emptyErrors: errorsType = {
   radius: '',
 }
 
-export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: CampaignFormProps) {
+export default function CampaignForm({
+  showEmeraldBalance = false,
+  showDeleteButton = false,
+  campaign,
+  emeraldFunds,
+  onSuccess,
+  onDelete,
+}: CampaignFormProps) {
+  const { campaigns } = useCampaigns()
+  const [loadedName, setLoadedName] = useState<string>(campaign.name)
   const [form, setForm] = useState<Campaign>(campaign)
   const [errors, setErrors] = useState<errorsType>({ ...emptyErrors })
   const [emeraldFundsBalance, setEmeraldFundsBalance] = useState(emeraldFunds)
@@ -43,6 +57,8 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
     form.name = form.name.trim()
     if (!form.name) e.name = 'Campaign name is required.'
     if (form.name.length > 255) e.name = 'Campaign name is too long.'
+    if (loadedName !== form.name && campaigns.find((c) => c.name === form.name))
+      e.name = 'Campaign name is already in use.'
 
     // if (form.keywords.length === 0) e.keywords = 'At least one keyword is required.'
     // if (form.keywords.length > 10) e.keywords = 'Provided too many key words.'
@@ -82,8 +98,12 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
     }
   }
 
+  const deleteCampaign = () => {
+    onDelete && onDelete(form)
+  }
+
   return (
-    <form onSubmit={handleSubmit} noValidate className="">
+    <form onSubmit={handleSubmit} noValidate>
       <FormField label="Campaign Name" required error={errors.name}>
         <input
           style={{
@@ -92,7 +112,6 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
           value={form.name}
           onChange={(e) => set('name', e.target.value)}
           placeholder="e.g. Summer Sale 2025"
-          onFocus={(e) => !errors.name && (e.target.style.borderColor = color.accent)}
           onBlur={(e) =>
             (e.target.style.borderColor = errors.name
               ? color.error
@@ -124,7 +143,6 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
               onChange={(e) => set('bidAmount', e.target.value)}
               min={bidAmountMin}
               placeholder={String(bidAmountMin)}
-              onFocus={(e) => !errors.bidAmount && (e.target.style.borderColor = color.accent)}
               onBlur={(e) =>
                 (e.target.style.borderColor = errors.bidAmount ? color.error : color.bright)
               }
@@ -154,7 +172,6 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
               min={1}
               max={emeraldFundsBalance}
               placeholder="0"
-              onFocus={(e) => !errors.fund && (e.target.style.borderColor = color.accent)}
               onBlur={(e) =>
                 (e.target.style.borderColor = errors.fund ? color.error : color.bright)
               }
@@ -167,7 +184,7 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
       </div>
 
       <FormField label="Status" required>
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div className="flex gap-[10px]">
           {[true, false].map((s, index) => (
             <button
               key={index}
@@ -207,10 +224,10 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
                 "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239ca3af' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E\")",
               backgroundRepeat: 'no-repeat',
               backgroundPosition: 'right 12px center',
+              borderColor: errors.radius ? color.error : color.bright,
             }}
             value={form.town}
             onChange={(e) => set('town', e.target.value)}
-            onFocus={(e) => (e.target.style.borderColor = color.accent)}
             onBlur={(e) => (e.target.style.borderColor = color.bright)}
           >
             {citiesOptions.map((c) => (
@@ -235,7 +252,6 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
               min={1}
               max={9999}
               placeholder="25"
-              onFocus={(e) => !errors.radius && (e.target.style.borderColor = color.accent)}
               onBlur={(e) =>
                 (e.target.style.borderColor = errors.radius ? color.error : color.bright)
               }
@@ -249,12 +265,20 @@ export default function CampaignForm({ campaign, emeraldFunds, onSuccess }: Camp
 
       {/* Actions */}
       <div className="flex gap-4 mt-[20px]">
-        <div className="">
-          <p className="w-full font-semibold text-xs text-gray-400">EMERALD BALANCE: </p>
-          <p className="w-full text-2xl font-extrabold" style={{ color: color.accent }}>
-            {emeraldFundsBalance.toFixed(2)}$
-          </p>
-        </div>
+        {showEmeraldBalance && <EmeraldFundBalance emeraldFund={emeraldFundsBalance} />}
+        {showDeleteButton && (
+          <button
+            type="button"
+            className="max-w-[200px] p-3 flex-1 border-none rounded-[10px] font-bold text-white"
+            style={{
+              background: '#C70000',
+              boxShadow: '0 4px 14px rgba(99,102,241,0.35)',
+            }}
+            onClick={deleteCampaign}
+          >
+            Delete Campaign
+          </button>
+        )}
         <button
           type="submit"
           className="max-w-[300px] p-3 ml-auto flex-2 border-none rounded-[10px] font-bold text-white"

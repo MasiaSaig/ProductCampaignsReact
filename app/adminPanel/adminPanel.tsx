@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import { CampaignCard } from '@/CampaignCard'
-import { Campaign, emptyCampaign } from '~/types/Capmaign'
+import { Campaign, emptyCampaign } from '~/types/Campaign'
 import { CampaignUpdateModal } from '@/CampaignUpdateModal'
+import { EmeraldFundBalance } from '@/EmeraldFundBalance'
 import type { campaignCard } from '~/types/CampaignCard'
 
 import { useCampaigns } from '~/CampaignContext'
@@ -15,7 +16,7 @@ export function AdminPanel() {
 
   // show modal after editingCampaign changes
   useEffect(() => {
-    if (editingCampaign.name.length) {
+    if (editingCampaign.id > 0) {
       setShowCampaignUpdateDialog(true)
     }
   }, [editingCampaign])
@@ -34,16 +35,27 @@ export function AdminPanel() {
   }
 
   function updateDataAfterSuccess(updatedCampaign: Campaign) {
-    updateCampaign(updatedCampaign.name, updatedCampaign)
+    console.log('success admin', updatedCampaign)
+    updateCampaign(updatedCampaign.id, updatedCampaign)
+    closeModal()
     // setEmeraldFundsBalance(emeraldFunds - updatedCampaign.fund)
+  }
+
+  function deleteCampaign(campaign: Campaign) {
+    if (campaigns.find((c) => c.id === campaign.id) !== undefined) {
+      removeCampaign(campaign.id)
+      closeModal()
+    } else {
+      console.error('Error on campaign deletion', { ...campaign })
+    }
   }
 
   return (
     <section className="p-8">
       <main className="max-w-5xl m-auto">
-        <p>Emerald account funds: {emeraldFundsBalance}</p>
+        <EmeraldFundBalance emeraldFund={emeraldFundsBalance} />
 
-        <section className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2">
+        <section className="mt-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2">
           {campaigns.map((campaign, index) => (
             <CampaignCard
               key={index}
@@ -62,6 +74,7 @@ export function AdminPanel() {
           campaign={editingCampaign}
           emeraldFunds={emeraldFundsBalance}
           onSuccess={(c) => updateDataAfterSuccess(c)}
+          onDelete={(c) => deleteCampaign(c)}
         />
       )}
     </section>

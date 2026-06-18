@@ -1,13 +1,24 @@
 form input {
-  border: 1px solid gray;
+  border: 1px solid rgb(229, 231, 235);
   border-radius: 8px;
   padding: 10px 14px;
 }
 
+form input:focus {
+  outline: 1px solid #b3603e;
+}
+
 form select {
-  border: 1px solid gray;
+  border: 1px solid rgb(229, 231, 235);
   border-radius: 8px;
   padding: 10px 14px;
+}
+form select:focus {
+  outline: 1px solid #b3603e;
+}
+
+form button:focus {
+  outline: 1px solid #b3603e;
 }
 
 form label {
