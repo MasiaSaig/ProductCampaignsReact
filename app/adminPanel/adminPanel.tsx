@@ -3,6 +3,7 @@ import { CampaignCard } from '@/CampaignCard'
 import { EmeraldFundBalance } from '@/EmeraldFundBalance'
 import { CampaignUpdateModal } from '@/CampaignUpdateModal'
 import { TopBar } from '@/TopBar'
+import { ButtonCreateCampaign } from '@/Buttons/CreateCampaign'
 
 import { Campaign, emptyCampaign } from '~/types/Campaign'
 import type { campaignCard } from '~/types/CampaignCard'
@@ -57,6 +58,7 @@ export function AdminPanel() {
       <TopBar />
       <section className="p-8">
         <main className="max-w-5xl m-auto">
+          <ButtonCreateCampaign onClick={() => null} />
           <EmeraldFundBalance emeraldFund={emeraldFundsBalance} />
 
           <section className="mt-4 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2">
