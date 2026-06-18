@@ -7,13 +7,19 @@ export interface ModalProps {
 }
 
 export function Modal({ title = '', exit, children }: ModalProps) {
+  function closeModal(e: any) {
+    if (e.target === e.currentTarget) exit()
+  }
+
+  function handleCancel(e: any) {
+    console.log('cancel')
+    e.preventDefault()
+  }
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
       style={{ backgroundColor: 'rgba(0, 0, 0, 0.45)' }}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) exit()
-      }}
     >
       <dialog
         open
@@ -37,45 +43,3 @@ export function Modal({ title = '', exit, children }: ModalProps) {
     </div>
   )
 }
-
-// ── Demo ─────────────────────────────────────────────────────────────────────
-// export default function App() {
-//   const [open, setOpen] = useState(false);
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-//       <button
-//         onClick={() => setOpen(true)}
-//         className="px-5 py-2.5 rounded-xl bg-gray-900 text-white text-sm font-medium hover:bg-gray-700 transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-gray-400"
-//       >
-//         Open Modal
-//       </button>
-
-//       {open && (
-//         <Modal title="Example Modal" exit={() => setOpen(false)}>
-//           <p className="text-gray-600 text-sm leading-relaxed">
-//             This is the modal body. Any children can be placed here — forms,
-//             images, lists, or custom components.
-//           </p>
-//           <div className="mt-4 p-4 rounded-lg bg-gray-50 text-sm text-gray-500">
-//             Slot for any <strong className="text-gray-700">React node</strong> you'd like to insert.
-//           </div>
-//           <div className="mt-6 flex justify-end gap-3">
-//             <button
-//               onClick={() => setOpen(false)}
-//               className="px-4 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors duration-150"
-//             >
-//               Cancel
-//             </button>
-//             <button
-//               onClick={() => setOpen(false)}
-//               className="px-4 py-2 rounded-lg bg-gray-900 text-white text-sm font-medium hover:bg-gray-700 transition-colors duration-150"
-//             >
-//               Confirm
-//             </button>
-//           </div>
-//         </Modal>
-//       )}
-//     </div>
-//   );
-// }
