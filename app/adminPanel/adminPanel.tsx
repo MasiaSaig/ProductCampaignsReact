@@ -15,7 +15,6 @@ export function AdminPanel() {
 
   // show modal after editingCampaign changes
   useEffect(() => {
-    console.log('switched editingCampaign', editingCampaign)
     if (editingCampaign.name.length) {
       setShowCampaignUpdateDialog(true)
     }
@@ -35,7 +34,6 @@ export function AdminPanel() {
   }
 
   function updateDataAfterSuccess(updatedCampaign: Campaign) {
-    console.log('after succss updatedCampaign', { ...updatedCampaign })
     updateCampaign(updatedCampaign.name, updatedCampaign)
     // setEmeraldFundsBalance(emeraldFunds - updatedCampaign.fund)
   }
