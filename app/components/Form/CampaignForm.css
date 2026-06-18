@@ -6,7 +6,7 @@ form input {
 
 form input:focus,
 input:hover {
-  outline: 1px solid #b3603e;
+  outline: 1px solid #ffb900;
 }
 
 form select {
@@ -16,11 +16,11 @@ form select {
 }
 form select:focus,
 select:hover {
-  outline: 1px solid #b3603e;
+  outline: 1px solid #ffb900;
 }
 
 form button:focus {
-  outline: 1px solid #b3603e;
+  outline: 1px solid #ffb900;
 }
 
 form label {

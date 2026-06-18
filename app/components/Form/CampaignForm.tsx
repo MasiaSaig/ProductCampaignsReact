@@ -55,6 +55,10 @@ export default function CampaignForm({
     if (errors[field as keyof errorsType]) setErrors((e) => ({ ...e, [field]: '' }))
   }
 
+  function allowOnlyDigits(value: number, input: string) {
+    return input == '' ? String(value) : input
+  }
+
   function changeKeyWords(_event: any, value: any) {
     set('keywords', value)
   }
@@ -120,7 +124,7 @@ export default function CampaignForm({
       <FormField label="Campaign Name" required error={errors.name}>
         <input
           style={{
-            borderColor: errors.name ? color.error : form.name ? color.accentBlunt : color.bright,
+            borderColor: errors.name ? color.error : color.bright,
           }}
           value={form.name}
           onChange={(e) => set('name', e.target.value)}
@@ -187,12 +191,12 @@ export default function CampaignForm({
                 paddingLeft: '28px',
               }}
               value={form.bidAmount}
-              onChange={(e) => set('bidAmount', e.target.value)}
+              onChange={(e) => {
+                e.target.value = allowOnlyDigits(form.bidAmount, e.target.value)
+                set('bidAmount', e.target.value)
+              }}
               min={bidAmountMin}
               placeholder={String(bidAmountMin)}
-              onBlur={(e) =>
-                (e.target.style.borderColor = errors.bidAmount ? color.error : color.bright)
-              }
             />
             <span className="absolute left-3 top-[50%] -translate-y-[50%] text-[0.9rem] text-gray-400 pointer-events-none">
               $
@@ -215,13 +219,13 @@ export default function CampaignForm({
                 borderColor: errors.fund ? color.error : color.bright,
               }}
               value={form.fund}
-              onChange={(e) => set('fund', e.target.value)}
+              onChange={(e) => {
+                e.target.value = allowOnlyDigits(form.fund, e.target.value)
+                set('fund', e.target.value)
+              }}
               min={1}
               max={emeraldFundsBalance}
               placeholder="0"
-              onBlur={(e) =>
-                (e.target.style.borderColor = errors.fund ? color.error : color.bright)
-              }
             />
             <span className="absolute left-3 top-[50%] -translate-y-[50%] text-[0.9rem] text-gray-400 pointer-events-none">
               $
@@ -239,16 +243,17 @@ export default function CampaignForm({
               onClick={() => set('status', s)}
               className="flex justify-center items-center gap-3 flex-1 p-3 rounded-md text-sm font-semibold transition"
               style={{
-                border: form.status === s ? '2px solid transparent' : '1.5px solid #e5e7eb',
+                border: form.status === s ? '2px solid transparent' : '1.5px solid #fff',
                 background:
-                  form.status === s ? (s === true ? '#00AF00' : color.disabledAccent) : '#f9fafb',
-                color: form.status === s ? '#fff' : color.disabled,
+                  form.status === s ? (s === true ? '#00AF00' : color.disabledAccent) : color.white,
+                color: form.status === s ? color.white : color.disabled,
               }}
             >
               <span
                 className="inline-block size-2 rounded-[50%]"
                 style={{
-                  background: form.status === s ? (s === true ? '#00D700' : '#9ca3af') : '#d1d5db',
+                  background:
+                    form.status === s ? (s === true ? '#00D700' : color.white) : color.white,
                 }}
               />
               {s === true ? 'Active' : 'Inactive'}
@@ -270,7 +275,6 @@ export default function CampaignForm({
             }}
             value={form.town}
             onChange={(e) => set('town', e.target.value)}
-            onBlur={(e) => (e.target.style.borderColor = color.bright)}
           >
             <option key={'Any town'} value={'Any town'}>
               Any town
@@ -293,13 +297,13 @@ export default function CampaignForm({
                 borderColor: errors.radius ? color.error : color.bright,
               }}
               value={form.radius}
-              onChange={(e) => set('radius', e.target.value)}
+              onChange={(e) => {
+                e.target.value = allowOnlyDigits(form.radius, e.target.value)
+                set('radius', e.target.value)
+              }}
               min={1}
               max={9999}
               placeholder="25"
-              onBlur={(e) =>
-                (e.target.style.borderColor = errors.radius ? color.error : color.bright)
-              }
             />
             <span className="absolute right-3 top-[50%] -translate-y-[50%] text-[0.9rem] text-gray-400 pointer-events-none">
               km

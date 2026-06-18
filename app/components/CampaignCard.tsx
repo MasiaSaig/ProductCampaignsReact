@@ -21,14 +21,16 @@ export function CampaignCard({
 }: campaignCardProps) {
   return (
     <article
-      className="flex flex-col p-3 rounded-md shadow-m transition-all border border-transparent hover:border-[#D39C58]"
+      className="flex flex-col p-3 rounded-md shadow-m transition-all border border-transparent hover:border-[#ffb900]"
       style={{
         backgroundColor: white,
       }}
       onClick={() => click && click({ id, name, keywords, isActive, town })}
     >
       <div className="flex justify-between items-center">
-        <h3 className="font-bold text-2xl">{name}</h3>
+        <h3 className="font-bold text-2xl line-clamp-2" title={name}>
+          {name}
+        </h3>
         {showStatusBulb && <StatusBulb isActive={isActive} />}
         {showTown && town && <span className="bg-gray-300 rounded-lg px-[4px]">{town}</span>}
       </div>
