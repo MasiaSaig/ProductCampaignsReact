@@ -1,28 +1,21 @@
 import { useState, useEffect } from 'react'
 import { CampaignCard } from '@/CampaignCard'
-import { Campaign } from '~/types/Capmaign'
-import { CampaignModal } from '@/CampaignModal'
+import { Campaign, emptyCampaign } from '~/types/Capmaign'
+import { CampaignUpdateModal } from '@/CampaignUpdateModal'
 import type { campaignCard } from '~/types/CampaignCard'
 
 import { useCampaigns } from '~/CampaignContext'
+import { emeraldFunds } from '~/data-mockup'
 
 export function AdminPanel() {
-  const { campaigns, addCampaign } = useCampaigns()
-  const emptyCampaign = {
-    name: '',
-    keywords: [],
-    bidAmount: 0,
-    found: 0,
-    status: false,
-    radius: 0,
-    town: '',
-  }
-  const [editingCampaign, setEditingCampaign] = useState<Campaign>(emptyCampaign)
+  const { campaigns, addCampaign, removeCampaign, updateCampaign } = useCampaigns()
+  const [emeraldFundsBalance, setEmeraldFundsBalance] = useState(Number(emeraldFunds))
+  const [editingCampaign, setEditingCampaign] = useState<Campaign>({ ...emptyCampaign })
   const [showCampaignUpdateDialog, setShowCampaignUpdateDialog] = useState(false)
 
   // show modal after editingCampaign changes
   useEffect(() => {
-    console.log('editingCampaign', editingCampaign)
+    console.log('switched editingCampaign', editingCampaign)
     if (editingCampaign.name.length) {
       setShowCampaignUpdateDialog(true)
     }
@@ -38,13 +31,19 @@ export function AdminPanel() {
 
   function closeModal() {
     setShowCampaignUpdateDialog(false)
-    setEditingCampaign(emptyCampaign)
+    setEditingCampaign({ ...emptyCampaign })
+  }
+
+  function updateDataAfterSuccess(updatedCampaign: Campaign) {
+    console.log('after succss updatedCampaign', { ...updatedCampaign })
+    updateCampaign(updatedCampaign.name, updatedCampaign)
+    // setEmeraldFundsBalance(emeraldFunds - updatedCampaign.fund)
   }
 
   return (
     <section className="p-8">
       <main className="max-w-5xl m-auto">
-        <p>Emerald account funds</p>
+        <p>Emerald account funds: {emeraldFundsBalance}</p>
 
         <section className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2">
           {campaigns.map((campaign, index) => (
@@ -60,7 +59,12 @@ export function AdminPanel() {
       </main>
 
       {showCampaignUpdateDialog && (
-        <CampaignModal title="Edit Campaign" exit={closeModal} campaign={editingCampaign} />
+        <CampaignUpdateModal
+          exit={closeModal}
+          campaign={editingCampaign}
+          emeraldFunds={emeraldFundsBalance}
+          onSuccess={(c) => updateDataAfterSuccess(c)}
+        />
       )}
     </section>
   )

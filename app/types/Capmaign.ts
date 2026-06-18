@@ -1,8 +1,8 @@
 export class Campaign {
   name: string
   keywords: Array<string>
-  bidAmount: Number
-  found: number // pln or euro I guess
+  bidAmount: number
+  fund: number // pln or euro I guess
   status: boolean
   radius: number // km
   town: string
@@ -18,9 +18,19 @@ export class Campaign {
     this.name = name
     this.keywords = keywords
     this.bidAmount = bidAmount
-    this.found = found
+    this.fund = found
     this.status = status
     this.radius = radius
     this.town = town
   }
+}
+
+export const emptyCampaign = {
+  name: '',
+  keywords: [],
+  bidAmount: 0,
+  fund: 0,
+  status: false,
+  radius: 0,
+  town: '',
 }

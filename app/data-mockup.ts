@@ -4,7 +4,7 @@ export const emeraldFunds = 9999
 
 export const citiesOptions = ['Warsaw', 'Cracow', 'Gdansk', 'Wroclaw', 'Poznan', 'Lodz', 'Katowice']
 
-export const bidAmountMin = 100
+export const bidAmountMin = 1.0
 
 export const keywordsOptions = [
   'summer',
